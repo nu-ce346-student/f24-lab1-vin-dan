@@ -20,6 +20,9 @@ void software_interrupt_init(void) {
 // Trigger a software interrupt
 void software_interrupt_trigger(void) {
   NRF_EGU1->TASKS_TRIGGER[0] = 1;
+
+  printf("Trigger software interrupt");
+
 }
 
 void SWI1_EGU1_IRQHandler(void) {
@@ -84,10 +87,19 @@ int main(void) {
   // Add code here
 
 
+
+
   // loop forever
   while (1) {
     printf("Looping\n");
     nrf_delay_ms(1000);
+
+      for (int i = 0; i < 5; i++) {
+        software_interrupt_init();
+        software_interrupt_trigger();
+        nrf_delay_ms(5000);
+      }
+
   }
 }
 
