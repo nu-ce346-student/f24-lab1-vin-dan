@@ -19,7 +19,7 @@ int main(void) {
   // Enter main loop.
   while (1) {
     nrf_gpio_pin_toggle(LED_MIC);
-    nrf_delay_ms(500);
+    nrf_delay_ms(150);
   }
 }
 

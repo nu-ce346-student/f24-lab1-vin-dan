@@ -16,6 +16,8 @@ int main(void) {
 
   // dereference a NULL pointer
   volatile int invalid = *(int*)0x00000000;
+  // App is errorinng since the memory address isn't valid
+
 
   printf("You should never see this print %d\n", invalid);
   while (1);
