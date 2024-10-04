@@ -21,7 +21,7 @@ void software_interrupt_init(void) {
 void software_interrupt_trigger(void) {
   NRF_EGU1->TASKS_TRIGGER[0] = 1;
 
-  printf("Trigger software interrupt");
+  printf("Trigger software interrupt\n");
 
 }
 
@@ -36,7 +36,7 @@ void GPIOTE_IRQHandler(void) {
   // Clear interrupt event
   NRF_GPIOTE->EVENTS_IN[0] = 0;
 
-  printf("Interrupted!!!");
+  printf("Interrupted!!!\n");
 
   // Implement me
 }
