@@ -27,14 +27,14 @@ void gpio_config(uint8_t gpio_num, gpio_direction_t dir) {
   if (gpio_num <= 31) {
     pin = gpio_num;
     // set rightmost bit to dir
-    GPIO_REGS_P0->PIN_CNF[pin] |=  (dir << 31);
+    GPIO_REGS_P0->PIN_CNF[pin] |=  (dir << 0);
   }
 
   // PORT 1:
   else {
-    pin = gpio_num;
+    pin = gpio_num - 32;
     // set rightmost bit to dir
-    GPIO_REGS_P1->PIN_CNF[pin] |= (dir << 31);
+    GPIO_REGS_P1->PIN_CNF[pin] |= (dir << 0);
   }
 
   // This function should configure the pin as an input/output
@@ -44,9 +44,24 @@ void gpio_config(uint8_t gpio_num, gpio_direction_t dir) {
 // Inputs: 
 //  gpio_num - gpio number 0-31 OR (32 + gpio number)
 void gpio_set(uint8_t gpio_num) {
-  // Implement me
   // This function should make the pin high
   // It can assume that the pin has already been configured
+  uint8_t pin;
+  // PORT 0:
+  if (gpio_num <= 31) {
+    pin = gpio_num;
+    // set 16, 17th bit to 2
+    GPIO_REGS_P0->PIN_CNF[pin] |=  (1 << 17);
+    GPIO_REGS_P0->PIN_CNF[pin] |=  (0 << 16);
+  }
+
+  // PORT 1:
+  else {
+    pin = gpio_num - 32;
+    // set 16, 17th bit to 2
+    GPIO_REGS_P1->PIN_CNF[pin] |=  (1 << 17);
+    GPIO_REGS_P1->PIN_CNF[pin] |=  (0 << 16);
+  }
 }
 
 // Inputs: 
@@ -55,6 +70,22 @@ void gpio_clear(uint8_t gpio_num) {
   // Implement me
   // This function should make the pin low
   // It can assume that the pin has already been configured
+  uint8_t pin;
+  // PORT 0:
+  if (gpio_num <= 31) {
+    pin = gpio_num;
+    // set 16, 17th bit to 3
+    GPIO_REGS_P0->PIN_CNF[pin] |=  (1 << 17);
+    GPIO_REGS_P0->PIN_CNF[pin] |=  (1 << 16);
+  }
+
+  // PORT 1:
+  else {
+    pin = gpio_num - 32;
+    // set 16, 17th bit to 3
+    GPIO_REGS_P1->PIN_CNF[pin] |=  (1 << 17);
+    GPIO_REGS_P1->PIN_CNF[pin] |=  (1 << 16);
+  }
 }
 
 // Inputs: 
@@ -65,7 +96,19 @@ bool gpio_read(uint8_t gpio_num) {
   // Implement me
   // This function should read the value from the pin
   // It can assume that the pin has already been configured
+    uint8_t pin;
+  // PORT 0:
+  if (gpio_num <= 31) {
+    pin = gpio_num;
+    return GPIO_REGS_P0->PIN_CNF[pin];
+  }
 
+  // PORT 1:
+  else {
+    pin = gpio_num - 32;
+    return GPIO_REGS_P1->PIN_CNF[pin];
+  }
+  
   return true;
 }
 
