@@ -3,8 +3,21 @@
 typedef struct{
   // Step 3:
   // Add register definitions here
+  uint32_t OUT;
+  uint32_t OUTSET;
+  uint32_t OUTCLR;
+  uint32_t IN;
+  uint32_t DIR;
+  uint32_t DIRSET;
+  uint32_t DIRCLR;
+  uint32_t LATCH;
+  uint32_t DETECTMODE;
+  uint32_t _unused_A[(0x700-0x524)/4 - 1];
+  uint32_t PIN_CNF[32];
 } gpio_reg_t;
 
+volatile gpio_reg_t* GPIO_REGS_P0 = (gpio_reg_t*)(0x50000504);
+volatile gpio_reg_t* GPIO_REGS_P1 = (gpio_reg_t*)(0x50000804);
 // Inputs: 
 //  gpio_num - gpio number 0-31 OR (32 + gpio number)
 //  dir - gpio direction (INPUT, OUTPUT)
@@ -47,5 +60,10 @@ void gpio_print(void) {
   // Use this function for debugging purposes
   // For example, you could print out struct field addresses
   // You don't otherwise have to write anything here
+  printf("\nout:\t");
+  printf("%p", &GPIO_REGS_P1->OUT);
+  printf("\ncnf9:\t");
+  printf("%p", &GPIO_REGS_P1->PIN_CNF[9]);
+  printf("\n");
 }
 

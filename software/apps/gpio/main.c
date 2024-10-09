@@ -39,6 +39,7 @@ int main(void) {
     // Button A is P0.14 and active low
     // Button B is P0.23 and active low
     // Add code here
+    gpio_print();
     nrf_delay_ms(100);
   }
 }
