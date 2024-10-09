@@ -39,8 +39,43 @@ int main(void) {
     // Button A is P0.14 and active low
     // Button B is P0.23 and active low
     // Add code here
-    gpio_print();
     nrf_delay_ms(100);
+
+    // ROW1	- P0.21
+    // ROW2 - P0.22
+    // ROW3 - P0.15
+    // ROW4 - P0.24
+    // ROW5 - P0.19
+    // COL1	- P0.28
+    // COL2	- P0.11
+    // COL3	- P0.31
+    // COL4	- P1.05 (i.e., pin number 37)
+    // COL5	- P0.30
+    
+    gpio_config(21, 1);
+    gpio_config(22, 1);
+    gpio_config(15, 1);
+    gpio_config(24, 1);
+    gpio_config(19, 1);
+    gpio_config(28, 1);
+    gpio_config(11, 1);
+    gpio_config(31, 1);
+    gpio_config(37, 1);
+    gpio_config(30, 1);
+
+    gpio_set(21);
+    gpio_set(22);
+    gpio_set(15);
+    gpio_set(24);
+    gpio_set(19);
+
+    gpio_clear(28);
+    gpio_clear(11);
+    gpio_clear(31);
+    gpio_clear(37);
+    gpio_clear(30);
+    gpio_print();
+
   }
 }
 

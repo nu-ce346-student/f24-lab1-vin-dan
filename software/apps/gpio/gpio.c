@@ -25,19 +25,36 @@ volatile gpio_reg_t* GPIO_REGS_P1 = (gpio_reg_t*)(0x50000804);
 void gpio_config(uint8_t gpio_num, gpio_direction_t dir) {
   // This function should configure the pin as an input/output
   // Hint: Use proper PIN_CNF instead of DIR
+
   uint8_t pin;
   // PORT 0:
   if (gpio_num <= 31) {
     pin = gpio_num;
-    // set rightmost bit to dir
-    GPIO_REGS_P0->PIN_CNF[pin] |=  (dir << 0);
+    // if configuring this to an input: set dir = 0 and input = 0
+    if (dir == GPIO_INPUT) {
+      GPIO_REGS_P0->PIN_CNF[pin] |= (GPIO_INPUT << 0);
+      GPIO_REGS_P0->PIN_CNF[pin] |= (GPIO_INPUT << 1); 
+    }
+    // else set dir = 1 and input = 1
+    else {
+      GPIO_REGS_P0->PIN_CNF[pin] |= (GPIO_OUTPUT << 0);
+      GPIO_REGS_P0->PIN_CNF[pin] |= (0 << 1);
+    }
   }
 
   // PORT 1:
   else {
     pin = gpio_num - 32;
     // set rightmost bit to dir
-    GPIO_REGS_P1->PIN_CNF[pin] |= (dir << 0);
+    if (dir == GPIO_INPUT) {
+      GPIO_REGS_P1->PIN_CNF[pin] |= (GPIO_INPUT << 0);
+      GPIO_REGS_P1->PIN_CNF[pin] |= (GPIO_INPUT << 1); 
+    }
+    // else set dir = 1 and input = 1
+    else {
+      GPIO_REGS_P1->PIN_CNF[pin] |= (GPIO_OUTPUT << 0);
+      GPIO_REGS_P1->PIN_CNF[pin] |= (GPIO_OUTPUT << 1);
+    }
   }
 }
 
