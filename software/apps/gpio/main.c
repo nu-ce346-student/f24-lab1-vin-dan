@@ -46,6 +46,7 @@ int main(void) {
     // ====== part 13 ======
     // config the LEDs
     gpio_config(LED_MIC, 1);
+    gpio_clear(LED_MIC);
     gpio_config(21, 1);
     gpio_config(22, 1);
     gpio_config(15, 1);
@@ -60,6 +61,8 @@ int main(void) {
     // config the buttons
     gpio_config(BTN_A, 0); // A
     gpio_config(BTN_B, 0); // B
+    NRF_GPIO->PIN_CNF[14] &= (0 << 1);
+    NRF_GPIO->PIN_CNF[23] &= (0 << 1);
   }
   
   conf();
@@ -73,17 +76,17 @@ int main(void) {
     // Add code here
     nrf_delay_ms(100);
 
-    // part 13
+    bool btn_a_state = gpio_read(BTN_A);
+    bool btn_b_state = gpio_read(BTN_B);
     printf("LED_MIC: %d\n", gpio_read(LED_MIC));
     printf("BTN_A: %d\n", gpio_read(BTN_A));
     printf("BTN_B: %d\n", gpio_read(BTN_B));
-    if(gpio_read(BTN_A) == 0) {
-      printf("BTN_A pressed\n");
-      gpio_set(LED_MIC);
-    }
-    if(gpio_read(BTN_B) == 0) {
-      printf("BTN_B pressed\n");
-      gpio_clear(LED_MIC);
+
+    // part 13
+    if (!btn_a_state) { // button pressed when state is 0 bc active low
+        gpio_set(LED_MIC);
+    } else if (!btn_b_state) {
+        gpio_clear(LED_MIC);
     }
 
     //  ====== part 12 ======

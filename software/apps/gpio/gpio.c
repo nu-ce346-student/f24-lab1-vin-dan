@@ -1,19 +1,30 @@
 #include "gpio.h"
 
+#define DIR_Pos     0
+#define DIR_Msk     (1 << DIR_Pos)
+#define INPUT_Pos   1
+#define INPUT_Msk   (1 << INPUT_Pos)
+#define PULL_Pos    2
+#define PULL_Msk    (3 << PULL_Pos)  // Two bits for PULL
+
+#define PULL_DISABLED  (0 << PULL_Pos)
+#define PULL_DOWN      (1 << PULL_Pos)
+#define PULL_UP        (2 << PULL_Pos)
+
 typedef struct{
   // Step 3:
   // Add register definitions here
-  uint32_t OUT;
-  uint32_t OUTSET;
-  uint32_t OUTCLR;
-  uint32_t IN;
-  uint32_t DIR;
-  uint32_t DIRSET;
-  uint32_t DIRCLR;
-  uint32_t LATCH;
-  uint32_t DETECTMODE;
+  volatile uint32_t OUT;
+  volatile uint32_t OUTSET;
+  volatile uint32_t OUTCLR;
+  volatile uint32_t IN;
+  volatile uint32_t DIR;
+  volatile uint32_t DIRSET;
+  volatile uint32_t DIRCLR;
+  volatile uint32_t LATCH;
+  volatile uint32_t DETECTMODE;
   uint32_t _unused_A[(0x700-0x524)/4 - 1];
-  uint32_t PIN_CNF[32];
+  volatile uint32_t PIN_CNF[32];
 } gpio_reg_t;
 
 volatile gpio_reg_t* GPIO_REGS_P0 = (gpio_reg_t*)(0x50000504);
@@ -58,7 +69,8 @@ void gpio_config(uint8_t gpio_num, gpio_direction_t dir) {
   }
 }
 
-// Inputs:
+// correct
+// Inputs: 
 //  gpio_num - gpio number 0-31 OR (32 + gpio number)
 void gpio_set(uint8_t gpio_num) {
   // This function should make the pin high
@@ -67,16 +79,16 @@ void gpio_set(uint8_t gpio_num) {
   // PORT 0:
   if (gpio_num <= 31) {
     pin = gpio_num;
-    GPIO_REGS_P0->OUT = (1 << pin);
+    GPIO_REGS_P0->OUTSET = (1 << pin);
   }
-
   // PORT 1:
   else {
     pin = gpio_num - 32;
-    GPIO_REGS_P1->OUT = (1 << pin);
+    GPIO_REGS_P1->OUTSET = (1 << pin);
   }
 }
 
+// 
 // Inputs:
 //  gpio_num - gpio number 0-31 OR (32 + gpio number)
 void gpio_clear(uint8_t gpio_num) {
@@ -87,13 +99,13 @@ void gpio_clear(uint8_t gpio_num) {
   // PORT 0:
   if (gpio_num <= 31) {
     pin = gpio_num;
-    GPIO_REGS_P0->OUTCLR =  (1 << pin);
+    GPIO_REGS_P0->OUTCLR = (1 << pin);
   }
 
   // PORT 1:
   else {
     pin = gpio_num - 32;
-    GPIO_REGS_P1->OUTCLR =  (1 << pin);
+    GPIO_REGS_P1->OUTCLR = (1 << pin);
   }
 }
 
