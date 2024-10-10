@@ -31,16 +31,7 @@ int main(void) {
   // Microphone LED is P0.20 and active high
   // Add code here
 
-  // loop forever
-  printf("Looping\n");
-  while (1) {
-
-    // Control LED with buttons
-    // Button A is P0.14 and active low
-    // Button B is P0.23 and active low
-    // Add code here
-    nrf_delay_ms(100);
-
+  void conf() {
     // ROW1	- P0.21
     // ROW2 - P0.22
     // ROW3 - P0.15
@@ -51,7 +42,10 @@ int main(void) {
     // COL3	- P0.31
     // COL4	- P1.05 (i.e., pin number 37)
     // COL5	- P0.30
-    
+
+    // ====== part 13 ======
+    // config the LEDs
+    gpio_config(LED_MIC, 1);
     gpio_config(21, 1);
     gpio_config(22, 1);
     gpio_config(15, 1);
@@ -63,19 +57,53 @@ int main(void) {
     gpio_config(37, 1);
     gpio_config(30, 1);
 
-    gpio_set(21);
-    gpio_set(22);
-    gpio_set(15);
-    gpio_set(24);
-    gpio_set(19);
+    // config the buttons
+    gpio_config(BTN_A, 0); // A
+    gpio_config(BTN_B, 0); // B
+  }
+  
+  conf();
 
-    gpio_clear(28);
-    gpio_clear(11);
-    gpio_clear(31);
-    gpio_clear(37);
-    gpio_clear(30);
-    gpio_print();
+  // loop forever
+  while (1) {
+    printf("Looping\n");
+    // Control LED with buttons
+    // Button A is P0.14 and active low
+    // Button B is P0.23 and active low
+    // Add code here
+    nrf_delay_ms(100);
+
+    // part 13
+    printf("LED_MIC: %d\n", gpio_read(LED_MIC));
+    printf("BTN_A: %d\n", gpio_read(BTN_A));
+    printf("BTN_B: %d\n", gpio_read(BTN_B));
+    if(gpio_read(BTN_A) == 0) {
+      printf("BTN_A pressed\n");
+      gpio_set(LED_MIC);
+    }
+    if(gpio_read(BTN_B) == 0) {
+      printf("BTN_B pressed\n");
+      gpio_clear(LED_MIC);
+    }
+
+    //  ====== part 12 ======
+
+    // gpio_set(21); // uncomment this for part 12
+    // gpio_set(22);
+    // gpio_set(15);
+    // gpio_set(24);
+    // gpio_set(19);
+
+    // gpio_clear(28);
+    // gpio_clear(11);
+    // gpio_clear(31);
+    // gpio_clear(37);
+    // gpio_clear(30);
+
+    // nrf_delay_us(100); 
+
+    // ====== interrupt checkpoint ======
+    // gpio_print(); // uncomment this for the interrupt
 
   }
 }
-

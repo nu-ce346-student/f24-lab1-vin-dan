@@ -67,13 +67,13 @@ void gpio_set(uint8_t gpio_num) {
   // PORT 0:
   if (gpio_num <= 31) {
     pin = gpio_num;
-    GPIO_REGS_P0->OUTSET |=  (1 << pin);
+    GPIO_REGS_P0->OUT = (1 << pin);
   }
 
   // PORT 1:
   else {
     pin = gpio_num - 32;
-    GPIO_REGS_P1->OUTSET |=  (1 << pin);
+    GPIO_REGS_P1->OUT = (1 << pin);
   }
 }
 
@@ -104,9 +104,9 @@ void gpio_clear(uint8_t gpio_num) {
 bool gpio_read(uint8_t gpio_num) {
   // This function should read the value from the pin
   // It can assume that the pin has already been configured
-    uint8_t pin;
-    uint32_t bit_mask; // 32 bits
-    uint32_t pin_state;
+  uint8_t pin;
+  uint32_t bit_mask; // 32 bits
+  uint32_t pin_state;
   // PORT 0:
   if (gpio_num <= 31) {
     pin = gpio_num;
@@ -114,12 +114,11 @@ bool gpio_read(uint8_t gpio_num) {
     pin_state = (GPIO_REGS_P0->IN & bit_mask);
     return pin_state != 0;
   }
-
   // PORT 1:
   else {
     pin = gpio_num - 32;
     bit_mask = (1 << pin);
-    pin_state = (GPIO_REGS_P0->IN & bit_mask);
+    pin_state = (GPIO_REGS_P1->IN & bit_mask);
     return pin_state != 0;
   }
 }
@@ -135,4 +134,3 @@ void gpio_print(void) {
   printf("%p", &GPIO_REGS_P1->PIN_CNF[9]);
   printf("\n");
 }
-
