@@ -22,6 +22,9 @@ void software_interrupt_trigger(void) {
   NRF_EGU1->TASKS_TRIGGER[0] = 1;
 
   printf("Trigger software interrupt\n");
+  nrf_delay_ms(5000);
+  printf("After sleep inside the interrupt.\n");
+
 
 }
 
@@ -35,8 +38,8 @@ void SWI1_EGU1_IRQHandler(void) {
 void GPIOTE_IRQHandler(void) {
   // Clear interrupt event
   NRF_GPIOTE->EVENTS_IN[0] = 0;
-
   printf("Interrupted!!!\n");
+  
 
   // Implement me
 }
