@@ -19,7 +19,7 @@ typedef struct{
 volatile gpio_reg_t* GPIO_REGS_P0 = (gpio_reg_t*)(0x50000504);
 volatile gpio_reg_t* GPIO_REGS_P1 = (gpio_reg_t*)(0x50000804);
 
-// Inputs: 
+// Inputs:
 //  gpio_num - gpio number 0-31 OR (32 + gpio number)
 //  dir - gpio direction (INPUT, OUTPUT)
 void gpio_config(uint8_t gpio_num, gpio_direction_t dir) {
@@ -33,7 +33,7 @@ void gpio_config(uint8_t gpio_num, gpio_direction_t dir) {
     // if configuring this to an input: set dir = 0 and input = 0
     if (dir == GPIO_INPUT) {
       GPIO_REGS_P0->PIN_CNF[pin] |= (GPIO_INPUT << 0);
-      GPIO_REGS_P0->PIN_CNF[pin] |= (GPIO_INPUT << 1); 
+      GPIO_REGS_P0->PIN_CNF[pin] |= (GPIO_INPUT << 1);
     }
     // else set dir = 1 and input = 1
     else {
@@ -48,7 +48,7 @@ void gpio_config(uint8_t gpio_num, gpio_direction_t dir) {
     // set rightmost bit to dir
     if (dir == GPIO_INPUT) {
       GPIO_REGS_P1->PIN_CNF[pin] |= (GPIO_INPUT << 0);
-      GPIO_REGS_P1->PIN_CNF[pin] |= (GPIO_INPUT << 1); 
+      GPIO_REGS_P1->PIN_CNF[pin] |= (GPIO_INPUT << 1);
     }
     // else set dir = 1 and input = 1
     else {
@@ -58,7 +58,7 @@ void gpio_config(uint8_t gpio_num, gpio_direction_t dir) {
   }
 }
 
-// Inputs: 
+// Inputs:
 //  gpio_num - gpio number 0-31 OR (32 + gpio number)
 void gpio_set(uint8_t gpio_num) {
   // This function should make the pin high
@@ -77,7 +77,7 @@ void gpio_set(uint8_t gpio_num) {
   }
 }
 
-// Inputs: 
+// Inputs:
 //  gpio_num - gpio number 0-31 OR (32 + gpio number)
 void gpio_clear(uint8_t gpio_num) {
   // Implement me
@@ -87,17 +87,17 @@ void gpio_clear(uint8_t gpio_num) {
   // PORT 0:
   if (gpio_num <= 31) {
     pin = gpio_num;
-    GPIO_REGS_P0->OUTCLR |=  (1 << pin);
+    GPIO_REGS_P0->OUTCLR =  (1 << pin);
   }
 
   // PORT 1:
   else {
     pin = gpio_num - 32;
-    GPIO_REGS_P1->OUTCLR |=  (1 << pin);
+    GPIO_REGS_P1->OUTCLR =  (1 << pin);
   }
 }
 
-// Inputs: 
+// Inputs:
 //  gpio_num - gpio number 0-31 OR (32 + gpio number)
 // Output:
 //  bool - pin state (true == high)
